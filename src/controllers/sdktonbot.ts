@@ -2,6 +2,17 @@
 
 import { Telegraf, Context } from 'telegraf';
 import { SdkGPT } from '../controllers/sdkgptv2'; // Ensure that the SdkGPT class is correctly exported
+import { makedir,fileExists,makefile_custom,readjson,readraw,appendLineToFile,parsetimestamp } from '../controllers/sdkmakers';
+
+const messageStart =
+`Hello welcome to this awesome MVP
+The private commands available are:
+- /admin     >[ADMIN] gives a test of admin check command
+- /getchatid > gives to u the chat id
+- /me        > gives to u the user information
+The public commands available are:
+- hello      >[PUBLIC] says hello
+`;
 
 export class SdkTonBot {
     private bot: Telegraf<Context>;
@@ -19,26 +30,11 @@ export class SdkTonBot {
 
         this.setupHandlers(); // Set up all bot command and message handlers
         this.setupErrorHandler(); // Add a global error handler
-    }
-
-
-    
-    
-    
+    }  
 
     private setupHandlers() {
         // Command /start
         this.bot.start(async (ctx: Context) => {
-            const messageStart = 
-        `Hello welcome to this awesome MVP
-The private commands available are:
-- /admin     >[ADMIN] gives a test of admin check command
-- /getchatid > gives to u the chat id
-- /me        > gives to u the user information
-The public commands available are:
-- hello      >[PUBLIC] says hello
-            `;
-
             await ctx.reply(messageStart);
         });
 
@@ -90,7 +86,6 @@ The public commands available are:
             const userId = ctx.from?.id;
             if (userId !== this.adminId) {await ctx.reply("You are not admin"); return }
 
-            // Ensure that ctx.message exists and has the 'text' property
             if (!ctx.message || !('text' in ctx.message)) {
                 await ctx.reply("This command only works with text messages.");
                 return;
@@ -113,6 +108,8 @@ The public commands available are:
             }
         });
 
+        //sniffer 
+        /*
         this.bot.on('message', async (ctx: Context) => {
             const message = ctx.message;
         
@@ -127,10 +124,82 @@ The public commands available are:
                 const text = message.text;
         
                 console.log(`[${user}]: ${text}`); // Imprime en consola
-                await ctx.reply(`You said: ${text}`);
+                appendLineToFile("log.txt",`[${user}]: ${text}`); // Guarda en archivo
+
+                let checkhourmsg = text.match(/\/hourmsg/i);
+
+                //await ctx.reply(`You said: ${text}`);
+            } else {
+                //console.log("Non-text message received.");
+                //await ctx.reply("This bot only processes text messages.");
+            }
+        });
+        */
+
+        /*structmsg
+            Full Message Object: {
+            "message_id": 35,
+            "from": {
+                "id": 167824567,
+                "is_bot": false,
+                "first_name": "Max",
+                "username": "newcortex",
+                "language_code": "es",
+                "is_premium": true
+            },
+            "chat": {
+                "id": -1002320133483,
+                "title": "Group With Shared Bot Sol AI Hack",
+                "type": "supergroup"
+            },
+            "date": 1734975224,
+            "text": "que la estan pasando"
+            }
+        */
+
+        //structsniffer
+        this.bot.on('message', async (ctx: Context) => {
+            const message = ctx.message;
+        
+            if (!message) {
+                console.error("No message found in the context.");
+                return;
+            }
+        
+            // Apreciatte msg struct
+            //console.log("Full Message Object:", JSON.stringify(message, null, 2));
+        
+            // Filtrar mensajes enviados por bots o usuarios sin nombre de usuario
+            const msgId = message.message_id;
+            const userId = message.from?.id;
+            const isBot = message.from?.is_bot;
+            const dateTimeStamp = message.date;
+            const username = message.from?.username || "NoUsername";
+            const isAdmin = "NA"
+            const date = parsetimestamp(dateTimeStamp);
+        
+            if (isBot || username === "NoUsername") {
+                console.log("Filtered message from bot or user without username.");
+                return;
+            }
+        
+            // Verificar si el mensaje tiene texto
+            if ('text' in message) {
+                const text = message.text;
+        
+                // Obtener fecha y hora
+                //const now = new Date();
+                //const date = now.toISOString().split('T')[0]; // YYYY-MM-DD
+                //const hour = now.getHours(); // Hora actual (0 a 23)
+                const parsetimestampt = date.toString();
+                const registerStruct = `${dateTimeStamp}_,_${msgId}_,_${isBot}_,_${userId}_,_${username}_,_${text}`
+                makedir(`astorage/crudetel/${date.yearmonthday}`);
+                //makefile_custom(registerStruct,`astorage/crudetel/${date.yearmonthday}/h_${date.hour}.txt`);
+                await appendLineToFile(`astorage/crudetel/${date.yearmonthday}/h_${date.hour}.txt`,`${registerStruct}`);
+                //const logMessage = `[${date}]_[${}]_[${userId}]_[${username}]_${text}`; 
+                
             } else {
                 console.log("Non-text message received.");
-                await ctx.reply("This bot only processes text messages.");
             }
         });
         

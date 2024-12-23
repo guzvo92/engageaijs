@@ -20,5 +20,5 @@ async function main() {
 
 // Ejecuta la función principal
 main().catch((error) => {
-    console.error("Error al iniciar el bot:", error);
+    console.error("Error start bot:", error);
 });
