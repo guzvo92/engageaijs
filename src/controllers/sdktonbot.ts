@@ -208,7 +208,7 @@ export class SdkTonBot {
             }
         
             // Imprimir mensaje completo para depuración
-            console.log("Full Message Object:", JSON.stringify(message, null, 2));
+            //console.log("Full Message Object:", JSON.stringify(message, null, 2));
         
             // Extraer información básica
             const msgId = message.message_id;
@@ -223,7 +223,7 @@ export class SdkTonBot {
                 return;
             }
         
-            // Manejar datos de reenvío
+            // manipulate received message
             let isForwarder = false;
             let forwardInfo: string | null = null;
             let typemsg = "user";
@@ -241,7 +241,7 @@ export class SdkTonBot {
                 }
             }
         
-            // Manejar texto del mensaje
+            // Handle text
             if (message.text) {
                 let processedText = message.text.replace(/\n/g, " ");
 
