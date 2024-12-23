@@ -90,7 +90,7 @@ export class SdkTonBot {
 
             await ctx.reply("Procesando...");
             try {
-                const response = await this.gptController.createNewPrompt(prompt);
+                const response = await this.gptController.message(prompt);
                 await ctx.reply(response);
             } catch (error) {
                 console.error("Error al procesar GPT:", error);

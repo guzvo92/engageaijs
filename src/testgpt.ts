@@ -1,7 +1,7 @@
 // src/index.ts
 
 import dotenv from 'dotenv';
-import { SdkGPT } from './controllers/sdkgpt';
+import { SdkGPT } from './controllers/sdkgptv2';
 
 // Cargar variables de entorno desde el archivo .env
 dotenv.config();
@@ -14,14 +14,7 @@ async function main() {
     }
 
     const gpt = new SdkGPT(GPT_KEY);
-
-    // Declara el tipo explícito para evitar conflictos con TypeScript
-    const message: { role: "system" | "user" | "assistant"; content: string }[] = [
-        { 
-            role: "user", 
-            content: "Dime quien es Rambo" 
-        }
-    ];
+    const message = "Dime quien es Rambo" 
 
     try {
         // Genera la respuesta utilizando el prompt
