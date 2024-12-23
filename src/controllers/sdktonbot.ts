@@ -1,7 +1,7 @@
 // src/sdk/sdktonbot.ts
 
 import { Telegraf, Context } from 'telegraf';
-import { SdkGPT } from '../controllers/sdkgpt'; // Asegúrate de que la clase SdkGPT esté correctamente exportada
+import { SdkGPT } from '../controllers/sdkgptv2'; // Asegúrate de que la clase SdkGPT esté correctamente exportada
 
 export class SdkTonBot {
     private bot: Telegraf<Context>;
