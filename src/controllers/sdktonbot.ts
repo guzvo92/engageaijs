@@ -21,6 +21,11 @@ export class SdkTonBot {
         this.setupErrorHandler(); // Add a global error handler
     }
 
+
+    
+    
+    
+
     private setupHandlers() {
         // Command /start
         this.bot.start(async (ctx: Context) => {
@@ -107,6 +112,31 @@ The public commands available are:
                 await ctx.reply("There was an error processing your request."); // Inform user of the error
             }
         });
+
+        this.bot.on('message', async (ctx: Context) => {
+            const message = ctx.message;
+        
+            if (!message) {
+                console.error("No message found in the context.");
+                return;
+            }
+        
+            // Verificar si el mensaje tiene texto
+            if ('text' in message) {
+                const user = message.from?.username || "Unknown";
+                const text = message.text;
+        
+                console.log(`[${user}]: ${text}`); // Imprime en consola
+                await ctx.reply(`You said: ${text}`);
+            } else {
+                console.log("Non-text message received.");
+                await ctx.reply("This bot only processes text messages.");
+            }
+        });
+        
+        
+        
+        
     }
 
     private setupErrorHandler() {
