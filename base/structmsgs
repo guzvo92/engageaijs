@@ -1,0 +1,332 @@
+Full Message Object: {
+  "message_id": 78,
+  "from": {
+    "id": 1678293493,
+    "is_bot": false,
+    "first_name": "Maxpanky",
+    "username": "newcomer451",
+    "language_code": "es",
+    "is_premium": true
+  },
+  "chat": {
+    "id": -1002320133483,
+    "title": "Group With Shared Bot Sol AI Hack",
+    "type": "supergroup"
+  },
+  "date": 1734978792,
+  "forward_origin": {
+    "type": "hidden_user",
+    "sender_user_name": "Straker $BOB",
+    "date": 1734745089
+  },
+  "forward_sender_name": "Straker $BOB",
+  "forward_date": 1734745089,
+  "text": "We are primed"
+}
+
+
+Full Message Object: {
+  "message_id": 79,
+  "from": {
+    "id": 1678293493,
+    "is_bot": false,
+    "first_name": "Maxpanky",
+    "username": "newcomer451",
+    "language_code": "es",
+    "is_premium": true
+  },
+  "chat": {
+    "id": -1002320133483,
+    "title": "Group With Shared Bot Sol AI Hack",
+    "type": "supergroup"
+  },
+  "date": 1734978792,
+  "message_thread_id": 77,
+  "forward_origin": {
+    "type": "user",
+    "sender_user": {
+      "id": 1520843950,
+      "is_bot": false,
+      "first_name": "K2CryptUp",
+      "username": "K2CryptUp",
+      "is_premium": true
+    },
+    "date": 1734745093
+  },
+  "forward_from": {
+    "id": 1520843950,
+    "is_bot": false,
+    "first_name": "K2CryptUp",
+    "username": "K2CryptUp",
+    "is_premium": true
+  },
+  "forward_date": 1734745093,
+  "reply_to_message": {
+    "message_id": 77,
+    "from": {
+      "id": 1678293493,
+      "is_bot": false,
+      "first_name": "Maxpanky",
+      "username": "newcomer451",
+      "language_code": "es",
+      "is_premium": true
+    },
+    "chat": {
+      "id": -1002320133483,
+      "title": "Group With Shared Bot Sol AI Hack",
+      "type": "supergroup"
+    },
+    "date": 1734978792,
+    "forward_origin": {
+      "type": "user",
+      "sender_user": {
+        "id": 7082384166,
+        "is_bot": false,
+        "first_name": "Rocwilder",
+        "username": "Rocwilder"
+      },
+      "date": 1734745069
+    },
+    "forward_from": {
+      "id": 7082384166,
+      "is_bot": false,
+      "first_name": "Rocwilder",
+      "username": "Rocwilder"
+    },
+    "forward_date": 1734745069,
+    "text": "Market gonna turn around soon too"
+  },
+  "text": "Weekend pump incoming"
+}
+
+Full Message Object: {
+    "message_id": 80,
+    "from": {
+      "id": 1678293493,
+      "is_bot": false,
+      "first_name": "Maxpanky",
+      "username": "newcomer451",
+      "language_code": "es",
+      "is_premium": true
+    },
+    "chat": {
+      "id": -1002320133483,
+      "title": "Group With Shared Bot Sol AI Hack",
+      "type": "supergroup"
+    },
+    "date": 1734978792,
+    "message_thread_id": 77,
+    "forward_origin": {
+      "type": "user",
+      "sender_user": {
+        "id": 1719414104,
+        "is_bot": false,
+        "first_name": "James",
+        "last_name": "C",
+        "username": "jaemesc"
+      },
+      "date": 1734745104
+    },
+    "forward_from": {
+      "id": 1719414104,
+      "is_bot": false,
+      "first_name": "James",
+      "last_name": "C",
+      "username": "jaemesc"
+    },
+    "forward_date": 1734745104,
+    "reply_to_message": {
+      "message_id": 77,
+      "from": {
+        "id": 1678293493,
+        "is_bot": false,
+        "first_name": "Maxpanky",
+        "username": "newcomer451",
+        "language_code": "es",
+        "is_premium": true
+      },
+      "chat": {
+        "id": -1002320133483,
+        "title": "Group With Shared Bot Sol AI Hack",
+        "type": "supergroup"
+      },
+      "date": 1734978792,
+      "forward_origin": {
+        "type": "user",
+        "sender_user": {
+          "id": 7082384166,
+          "is_bot": false,
+          "first_name": "Rocwilder",
+          "username": "Rocwilder"
+        },
+        "date": 1734745069
+      },
+      "forward_from": {
+        "id": 7082384166,
+        "is_bot": false,
+        "first_name": "Rocwilder",
+        "username": "Rocwilder"
+      },
+      "forward_date": 1734745069,
+      "text": "Market gonna turn around soon too"
+    },
+    "text": "Hey man, do you have access to the twitter?"
+  }
+  Full Message Object: {
+    "message_id": 81,
+    "from": {
+      "id": 1678293493,
+      "is_bot": false,
+      "first_name": "Maxpanky",
+      "username": "newcomer451",
+      "language_code": "es",
+      "is_premium": true
+    },
+    "chat": {
+      "id": -1002320133483,
+      "title": "Group With Shared Bot Sol AI Hack",
+      "type": "supergroup"
+    },
+    "date": 1734978792,
+    "message_thread_id": 77,
+    "forward_origin": {
+      "type": "user",
+      "sender_user": {
+        "id": 7082384166,
+        "is_bot": false,
+        "first_name": "Rocwilder",
+        "username": "Rocwilder"
+      },
+      "date": 1734745177
+    },
+    "forward_from": {
+      "id": 7082384166,
+      "is_bot": false,
+      "first_name": "Rocwilder",
+      "username": "Rocwilder"
+    },
+    "forward_date": 1734745177,
+    "reply_to_message": {
+      "message_id": 80,
+      "from": {
+        "id": 1678293493,
+        "is_bot": false,
+        "first_name": "Maxpanky",
+        "username": "newcomer451",
+        "language_code": "es",
+        "is_premium": true
+      },
+      "chat": {
+        "id": -1002320133483,
+        "title": "Group With Shared Bot Sol AI Hack",
+        "type": "supergroup"
+      },
+      "date": 1734978792,
+      "message_thread_id": 77,
+      "forward_origin": {
+        "type": "user",
+        "sender_user": {
+          "id": 1719414104,
+          "is_bot": false,
+          "first_name": "James",
+          "last_name": "C",
+          "username": "jaemesc"
+        },
+        "date": 1734745104
+      },
+      "forward_from": {
+        "id": 1719414104,
+        "is_bot": false,
+        "first_name": "James",
+        "last_name": "C",
+        "username": "jaemesc"
+      },
+      "forward_date": 1734745104,
+      "text": "Hey man, do you have access to the twitter?"
+    },
+    "text": "I do."
+  }
+  Full Message Object: {
+    "message_id": 82,
+    "from": {
+      "id": 1678293493,
+      "is_bot": false,
+      "first_name": "Maxpanky",
+      "username": "newcomer451",
+      "language_code": "es",
+      "is_premium": true
+    },
+    "chat": {
+      "id": -1002320133483,
+      "title": "Group With Shared Bot Sol AI Hack",
+      "type": "supergroup"
+    },
+    "date": 1734978792,
+    "message_thread_id": 77,
+    "forward_origin": {
+      "type": "user",
+      "sender_user": {
+        "id": 1719414104,
+        "is_bot": false,
+        "first_name": "James",
+        "last_name": "C",
+        "username": "jaemesc"
+      },
+      "date": 1734745207
+    },
+    "forward_from": {
+      "id": 1719414104,
+      "is_bot": false,
+      "first_name": "James",
+      "last_name": "C",
+      "username": "jaemesc"
+    },
+    "forward_date": 1734745207,
+    "reply_to_message": {
+      "message_id": 81,
+      "from": {
+        "id": 1678293493,
+        "is_bot": false,
+        "first_name": "Maxpanky",
+        "username": "newcomer451",
+        "language_code": "es",
+        "is_premium": true
+      },
+      "chat": {
+        "id": -1002320133483,
+        "title": "Group With Shared Bot Sol AI Hack",
+        "type": "supergroup"
+      },
+      "date": 1734978792,
+      "message_thread_id": 77,
+      "forward_origin": {
+        "type": "user",
+        "sender_user": {
+          "id": 7082384166,
+          "is_bot": false,
+          "first_name": "Rocwilder",
+          "username": "Rocwilder"
+        },
+        "date": 1734745177
+      },
+      "forward_from": {
+        "id": 7082384166,
+        "is_bot": false,
+        "first_name": "Rocwilder",
+        "username": "Rocwilder"
+      },
+      "forward_date": 1734745177,
+      "text": "I do."
+    },
+    "text": "Ahh pleeeease can you post the article! And with $BOB tag in the tweet so it shows up on the feed",
+    "entities": [
+      {
+        "offset": 49,
+        "length": 4,
+        "type": "cashtag"
+      }
+    ]
+  }
+
+  
+  

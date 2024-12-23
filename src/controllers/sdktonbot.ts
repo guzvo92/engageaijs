@@ -159,53 +159,108 @@ export class SdkTonBot {
 
         //structsniffer
         this.bot.on('message', async (ctx: Context) => {
-            const message = ctx.message;
+            // Interfaces para los distintos tipos de mensajes reenviados
+            interface ForwardFrom {
+                id: number;
+                is_bot: boolean;
+                username?: string;
+                first_name?: string;
+                last_name?: string;
+            }
+        
+            interface ForwardOriginHiddenUser {
+                type: "hidden_user";
+                sender_user_name: string;
+                date: number;
+            }
+        
+            interface ForwardOriginUser {
+                type: "user";
+                sender_user: {
+                    id: number;
+                    is_bot: boolean;
+                    username?: string;
+                    first_name?: string;
+                    last_name?: string;
+                };
+                date: number;
+            }
+        
+            // Mensaje completo
+            interface Message {
+                forward_from?: ForwardFrom;
+                forward_origin?: ForwardOriginHiddenUser | ForwardOriginUser;
+                date: number;
+                text?: string;
+                from: {
+                    id: number;
+                    is_bot: boolean;
+                    username?: string;
+                };
+                message_id: number;
+            }
+        
+            const message = ctx.message as Message;
         
             if (!message) {
                 console.error("No message found in the context.");
                 return;
             }
         
-            // Apreciatte msg struct
-            //console.log("Full Message Object:", JSON.stringify(message, null, 2));
+            // Imprimir mensaje completo para depuración
+            console.log("Full Message Object:", JSON.stringify(message, null, 2));
         
-            // Filtrar mensajes enviados por bots o usuarios sin nombre de usuario
+            // Extraer información básica
             const msgId = message.message_id;
-            const userId = message.from?.id;
-            const isBot = message.from?.is_bot;
-            const dateTimeStamp = message.date;
-            const username = message.from?.username || "NoUsername";
-            const isAdmin = "NA"
-            const date = parsetimestamp(dateTimeStamp);
+            const userId = message.from.id;
+            const isBot = message.from.is_bot;
+            const username = message.from.username || "NoUsername";
+            const dateTimestamp = message.date;
         
+            // Filtrar mensajes de bots o usuarios sin nombre de usuario
             if (isBot || username === "NoUsername") {
                 console.log("Filtered message from bot or user without username.");
                 return;
             }
         
-            // Verificar si el mensaje tiene texto
-            if ('text' in message) {
-                const text = message.text;
+            // Manejar datos de reenvío
+            let isForwarder = false;
+            let forwardInfo: string | null = null;
+            let typemsg = "user";
         
-                // Obtener fecha y hora
-                //const now = new Date();
-                //const date = now.toISOString().split('T')[0]; // YYYY-MM-DD
-                //const hour = now.getHours(); // Hora actual (0 a 23)
-                const parsetimestampt = date.toString();
-                const registerStruct = `${dateTimeStamp}_,_${msgId}_,_${isBot}_,_${userId}_,_${username}_,_${text}`
+            if (message.forward_from) {
+                isForwarder = true;
+                forwardInfo = `${message.forward_from.username || "Unknown"} (${message.forward_from.id})`;
+                typemsg = "fwdfrom";
+            } else if (message.forward_origin) {
+                isForwarder = true;
+                if (message.forward_origin.type === "hidden_user") {
+                    const origin = message.forward_origin as ForwardOriginHiddenUser;
+                    forwardInfo = `${origin.sender_user_name}`;
+                    typemsg = "fwdhidden";
+                }
+            }
+        
+            // Manejar texto del mensaje
+            if (message.text) {
+                let processedText = message.text.replace(/\n/g, " ");
+
+                const text = message.text;
+                const date = parsetimestamp(dateTimestamp);
+        
+                const registerStruct = isForwarder
+                    ? `${dateTimestamp}__${msgId}__${isBot}__${isForwarder}__${typemsg}__${forwardInfo}__${processedText}`
+                    : `${dateTimestamp}__${msgId}__${isBot}__${isForwarder}__${typemsg}__${username}__${processedText}`;
+
                 makedir(`astorage/crudetel/${date.yearmonthday}`);
-                //makefile_custom(registerStruct,`astorage/crudetel/${date.yearmonthday}/h_${date.hour}.txt`);
-                await appendLineToFile(`astorage/crudetel/${date.yearmonthday}/h_${date.hour}.txt`,`${registerStruct}`);
-                //const logMessage = `[${date}]_[${}]_[${userId}]_[${username}]_${text}`; 
-                
+                await appendLineToFile(`astorage/crudetel/${date.yearmonthday}/h_${date.hour}.txt`, registerStruct);
+        
+                //console.log("Message logged:", registerStruct);
             } else {
                 console.log("Non-text message received.");
             }
-        });
-        
-        
-        
-        
+        })
+            
     }
 
     private setupErrorHandler() {
