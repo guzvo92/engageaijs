@@ -15,5 +15,5 @@ if (!PK) {throw new Error("PK no está definido en las variables de entorno.")}
 
     console.log("\n--- Realizando Transferencia ---");
     const recipientPublicKey = new PublicKey('2dNvaGAeMNjAfs2xcwpxRKegLSaKgkacR6DuU1eScAF6');
-    await sdkSolana.transferSOL(recipientPublicKey,0.5);
+    //await sdkSolana.transferSOL(recipientPublicKey,0.5);
 })();

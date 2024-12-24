@@ -19,18 +19,19 @@ export class SdkSolana {
         this.payer = Keypair.fromSecretKey(new Uint8Array(KP));
     }
 
-    async getBalance(): Promise<void> {
+    async getBalance(): Promise<any> {
         try {
             const balance = await this.connection.getBalance(this.payer.publicKey);
             console.log(`Public Key: ${this.payer.publicKey.toString()}`);
             console.log(`Balance (SOL): ${balance / LAMPORTS_PER_SOL}`);
+            return `Balance (SOL): ${balance / LAMPORTS_PER_SOL}`
         } catch (error) {
             console.error("Error obteniendo el balance:", error);
         }
     }
 
     
-    async transferSOL(reciptx: PublicKey, amountx:number ): Promise<void> {
+    async transferSOL(reciptx: PublicKey, amountx:number ): Promise<any> {
         try {
             const amountInSOL = amountx;
             const lamports = amountInSOL * LAMPORTS_PER_SOL;
@@ -58,6 +59,7 @@ export class SdkSolana {
             const signature = await sendAndConfirmTransaction(this.connection, transaction, [this.payer]);
             console.log(`Transacción completada con éxito. Se enviaron ${amountInSOL} SOL.`);
             console.log(`Firma de la transacción: ${signature}`);
+            return signature
         } catch (error) {
             console.error("Error realizando la transferencia:", error);
         }

@@ -109,6 +109,31 @@ export function parsetimestamp(date: number) {
   };
 }
 
+export function cleanGPTResponse(rawResponse: string): string | null {
+  try {
+      // Eliminar el bloque de código "```json" y "```"
+      const cleanResponse = rawResponse.replace(/```json\n?/g, '').replace(/```/g, '').trim();
+      JSON.parse(cleanResponse); // Si falla, lanzará un error
+      return cleanResponse;
+  } catch (error) {
+      console.error("Invalid JSON format in GPT response:", error);
+      return null;
+  }
+}
+
+export function cleanAndParseJSON(rawResponse: string): any | null {
+  try {
+      // Deserializa directamente la cadena JSON
+      const parsedJSON = JSON.parse(rawResponse);
+      return parsedJSON;
+  } catch (error) {
+      console.error("Failed to parse GPT response as JSON:", error);
+      return null;
+  }
+}
+
+
+
 export async function makefile_custom(jsonData: any, fullpath: string) {
     const logData = JSON.stringify(jsonData, null, 2);
     try {
@@ -117,6 +142,16 @@ export async function makefile_custom(jsonData: any, fullpath: string) {
     } catch (err) {
       console.error("Error write file:", err);
     }
+}
+
+export async function makefile_customraw(data: any, fullpath: string) {
+  try {
+    await fs.writeFile(fullpath, data);
+    //console.log(`Archivo ${fullpath} generado correctamente`);
+  }
+  catch (err) {
+    console.error("Error write file:", err);
+  }
 }
 
 // Corrigiendo readjson para devolver una promesa con async/await
@@ -136,6 +171,21 @@ export async function readjson(filepath:string, legend:string|null = null) {
       return null; // Manejo de errores, retorna null en caso de error
     }
   }
+
+export async function readLinesFromFile(filepath: string, legend: string | null = null): Promise<string[] | null> {
+    try {
+        const fileContent = await fs.readFile(filepath, 'utf8');
+        const lines = fileContent.split(/\r?\n/); // Split by line endings (\n or \r\n)
+        return lines.filter(line => line.trim() !== ''); // Filter out empty lines
+    } catch (err) {
+        if (legend) {
+            console.error(legend, "Error reading or processing file:", err);
+        } else {
+            console.error("Error reading or processing file:", err);
+        }
+        return null; // Return null if there's an error
+    }
+}
 
 export async function appendLineToFile(filepath: string, line: string, legend: string | null = null): Promise<boolean> {
     try {

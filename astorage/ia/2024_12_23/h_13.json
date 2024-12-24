@@ -1,0 +1,198 @@
+{
+  "when": "2024_12_23",
+  "whenrun": "2024-12-24T02:44:02.177Z",
+  "hour": "h_13",
+  "Totalmessages": 161,
+  "Winner": 161,
+  "responsegpt": {
+    "Total_messages": 172,
+    "Unique_users": 24,
+    "Top_contributors": [
+      {
+        "idtelegram": 520276228,
+        "username": "CWombat",
+        "messages": 24
+      },
+      {
+        "idtelegram": 5994885234,
+        "username": "raidar",
+        "messages": 16
+      }
+    ],
+    "Users_activity": [
+      {
+        "idtelegram": 520276228,
+        "username": "CWombat",
+        "messages": 24
+      },
+      {
+        "idtelegram": 5994885234,
+        "username": "raidar",
+        "messages": 16
+      },
+      {
+        "idtelegram": 5927287509,
+        "username": "DONDEmf",
+        "messages": 11
+      },
+      {
+        "idtelegram": 1719414104,
+        "username": "jaemesc",
+        "messages": 10
+      },
+      {
+        "idtelegram": 6721601685,
+        "username": "Cheeserrrr",
+        "messages": 9
+      },
+      {
+        "idtelegram": 1520843950,
+        "username": "K2CryptUp",
+        "messages": 8
+      },
+      {
+        "idtelegram": 6726122430,
+        "username": "csmarketer",
+        "messages": 5
+      },
+      {
+        "idtelegram": 1518203466,
+        "username": "Ekrem014",
+        "messages": 4
+      },
+      {
+        "idtelegram": 7082384166,
+        "username": "Rocwilder",
+        "messages": 4
+      },
+      {
+        "idtelegram": 1473726933,
+        "username": "gw4pzz",
+        "messages": 4
+      },
+      {
+        "idtelegram": 7467973258,
+        "username": "whiteiverson043",
+        "messages": 1
+      },
+      {
+        "idtelegram": 5994885234,
+        "username": "raidar",
+        "messages": 16
+      },
+      {
+        "idtelegram": 1662790917,
+        "username": "ThoughtsGW",
+        "messages": 1
+      },
+      {
+        "idtelegram": 7543834329,
+        "username": "bitcoin_bob_bot",
+        "messages": 2
+      },
+      {
+        "idtelegram": 7785965448,
+        "username": "ApeMoe",
+        "messages": 8
+      },
+      {
+        "idtelegram": 5631409717,
+        "username": "Spenermaybe",
+        "messages": 2
+      },
+      {
+        "idtelegram": 7669745071,
+        "username": "Yoreee123",
+        "messages": 1
+      },
+      {
+        "idtelegram": 7905056693,
+        "username": "Unknown",
+        "messages": 1
+      },
+      {
+        "idtelegram": 7229498430,
+        "username": "Unknown",
+        "messages": 1
+      },
+      {
+        "idtelegram": 970009489,
+        "username": "moonholder1",
+        "messages": 1
+      },
+      {
+        "idtelegram": 6726122430,
+        "username": "csmarketer",
+        "messages": 2
+      },
+      {
+        "idtelegram": 6721601685,
+        "username": "Cheeserrrr",
+        "messages": 9
+      },
+      {
+        "idtelegram": 7669745071,
+        "username": "Yoreee123",
+        "messages": 1
+      },
+      {
+        "idtelegram": 1473726933,
+        "username": "gw4pzz",
+        "messages": 4
+      }
+    ],
+    "Message_types": {
+      "forwarded": 160,
+      "user-generated": 12
+    },
+    "Hashtags": {
+      "#BitcoinBob": 1
+    },
+    "Links_shared": {
+      "total_shared": 30,
+      "unique_links": [
+        "https://x.com/BitcoinBobonSOL/status/1870283663348236608",
+        "https://x.com/realacespadez?s=21",
+        "https://x.com/monkeyman0x/status/1870257062233481278",
+        "https://x.com/donde_crypto/status/1870287851025322490",
+        "https://x.com/donde_crypto/status/1870295133952061501",
+        "https://x.com/crypticwombat86/status/1870325291912253481",
+        "https://x.com/monkeyman0x/status/1870327760851210247",
+        "https://x.com/crypticwombat86/status/1870328940620865587",
+        "https://x.com/monkeyman0x/status/1870328509916209454",
+        "https://x.com/monkeyman0x/status/1870329068949815606",
+        "https://x.com/crypticwombat86/status/1870336309916762625",
+        "https://x.com/monkeyman0x/status/1870337475408740480",
+        "https://x.com/monkeyman0x/status/1870338477889298750",
+        "https://x.com/crypticwombat86/status/1870345891238027359",
+        "https://x.com/monkeyman0x/status/1870341607658340373",
+        "https://x.com/monkeyman0x/status/1870348387561902542"
+      ]
+    },
+    "Common_topics": [
+      "bitcoin",
+      "crypto",
+      "bob"
+    ],
+    "Sentiments": {
+      "positive": [
+        "good",
+        "bought the dip 👏",
+        "diamond hands today, lambo tomorrow 🚀"
+      ],
+      "negative": [
+        "shadow ban"
+      ]
+    },
+    "Recommendations": [
+      "Encourage more user-generated content",
+      "Increase engagement with community events",
+      "Focus on unique link sharing"
+    ],
+    "Winner": {
+      "username": "CWombat",
+      "idtelegram": 520276228,
+      "reason": "Highest number of messages"
+    }
+  }
+}

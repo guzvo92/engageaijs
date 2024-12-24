@@ -3,15 +3,27 @@
 import { Telegraf, Context } from 'telegraf';
 import { SdkGPT } from '../controllers/sdkgptv2'; // Ensure that the SdkGPT class is correctly exported
 import { makedir,fileExists,makefile_custom,readjson,readraw,appendLineToFile,parsetimestamp } from '../controllers/sdkmakers';
+import { routineIA } from '../testgpt';
+import { readif_wallet } from './tools';
+import { SdkSolana } from './sdksolana';
+import { PublicKey } from '@solana/web3.js'
+import dotenv from 'dotenv';
+dotenv.config();
 
 const messageStart =
 `Hello welcome to this awesome MVP
 The private commands available are:
-- /admin     >[ADMIN] gives a test of admin check command
-- /getchatid > gives to u the chat id
-- /me        > gives to u the user information
+- /admin      [ADMIN] [gives a test of admin check command]
+- /getchatid  [gives to u the chat id]
+- /me         [gives to u the user information]
+- /lookwallet [gives to u the wallet address]
+\n
+Private Interactive commands:
+- /addwallet PasteWalletHERE [gives to u the wallet address]
+(the command at Demo needs write /addwallet and paste the wallet address)
+\n
 The public commands available are:
-- hello      >[PUBLIC] says hello
+- hello   [PUBLIC] [says hello]
 `;
 
 export class SdkTonBot {
@@ -61,6 +73,118 @@ export class SdkTonBot {
                 await ctx.reply(this.warningErrorPrivate); // Inform user the command is private
             }
         });
+        
+        // Command /addwallet
+        this.bot.command('addwallet', async (ctx: Context) => {
+            const userId = ctx.from?.id;
+            const username = ctx.from?.username || "UnknownUser";
+
+            // Verifica que sea un chat privado
+            if (ctx.chat && ctx.chat.type === 'private') {
+                makedir("astorage/wallets");
+
+                // Extrae la wallet del mensaje del usuario (después de /addwallet)
+                if (!ctx.message || !('text' in ctx.message)) {
+                    await ctx.reply("This command only works with text messages.");
+                    return;
+                }
+                const messageText = ctx.message?.text || "";
+                const wallet = messageText.replace("/addwallet", "").trim();
+
+                // Validar si se proporcionó una wallet
+                if (!wallet) {
+                    await ctx.reply("Please provide a wallet address after the command.");
+                    return;
+                }
+
+                // Crear el archivo en el directorio con la información del usuario
+                const walletFilePath = `astorage/wallets/${userId}.json`;
+                const walletData = {
+                    id: userId,
+                    username: username,
+                    wallet: wallet,
+                    registered_at: new Date().toISOString(),
+                };
+
+                try {
+                    await makefile_custom(walletData, walletFilePath);
+                    await ctx.reply(`Wallet successfully registered: ${wallet}`);
+                } catch (error) {
+                    console.error("Error saving wallet file:", error);
+                    await ctx.reply("There was an error registering your wallet. Please try again later.");
+                }
+            } else {
+                await ctx.reply(this.warningErrorPrivate); // Inform user the command is private
+            }
+        });
+
+        // Command /lookwallet
+        this.bot.command('lookwallet', async (ctx: Context) => {
+            const userId = ctx.from?.id;
+
+            // Verifica que sea un chat privado
+            if (ctx.chat && ctx.chat.type === 'private') {
+                const walletFilePath = `astorage/wallets/${userId}.json`;
+                const walletData = await readjson(walletFilePath, "Error reading wallet file");
+
+                // Verificar si se encontró la wallet
+                if (!walletData) {
+                    await ctx.reply("No wallet found for this user.");
+                    return;
+                }
+                const wallet = walletData.wallet;
+                await ctx.reply(`Your wallet is: ${wallet}`);
+            } else {
+                await ctx.reply(this.warningErrorPrivate); // Inform user the command is private
+            }
+        });
+
+        this.bot.command('sampleai', async (ctx: Context) => {
+            const userId = ctx.from?.id;
+            //const wallet = walletData.wallet;
+            //await ctx.reply(`Your wallet is: sample`);
+            await ctx.reply("Scraping all messages and generatin AI analysis ...");
+            if (userId !== this.adminId) {await ctx.reply("You are not admin"); return }
+
+            let resultAI = await routineIA();
+            await ctx.reply("AI analysis completed");
+            await ctx.reply(`[1] [IA scrap] ${resultAI.Totalmessages} messages`);
+            await ctx.reply(`[2] [IA scrap] ${resultAI.responsegpt.Unique_users} unique users`);
+            await ctx.reply(`[3] Users Top loading...`);
+            for (const topc of resultAI.responsegpt.Top_contributors) {
+                await ctx.reply(`[3] [IA scrap] ${topc.username} ${topc.messages}`);
+            }
+
+            for (const st of resultAI.responsegpt.Sentiments.positive) {
+                await ctx.reply(`[6] [IA Positive Sentiments] \n ${st}`);
+            }
+            for (const st of resultAI.responsegpt.Sentiments.negative) {
+                await ctx.reply(`[7] [IA Negative Sentiments] \n ${st}`);
+            }
+            await ctx.reply(`[8] [IA scrap determine a winner] ${resultAI.responsegpt.Winner.username} ${resultAI.responsegpt.Winner.reason}`);
+            let ifwallet = await readif_wallet(resultAI.responsegpt.Winner.idtelegram);
+            if (!ifwallet) {
+                await ctx.reply("You need to register your wallet with /addwallet");
+            }
+            else {
+                const PK = process.env.BOTKP;
+                if (!PK) {throw new Error("PK no está definido en las variables de entorno.")}
+                console.log("PK:",PK);
+                const sdkSolana = new SdkSolana(PK.split(',').map(Number));
+                console.log("\n--- Consultar Saldo ---");
+                let balancetreasure = await sdkSolana.getBalance();
+                await ctx.reply(`Balance treasure: ${balancetreasure}`);
+                await ctx.reply("Your wallet is registered a part of the treasure would payed the transfer is incomming...");
+                const walletwinner = await readjson(`astorage/wallets/${resultAI.responsegpt.Winner.idtelegram}.json`, `Error reading wallet file for ${resultAI.responsegpt.Winner.idtelegram}:`);
+                const recipientPublicKey = new PublicKey(walletwinner.wallet);
+                let resuttx = await sdkSolana.transferSOL(recipientPublicKey,0.5);
+                await ctx.reply(`Transfer result ok: 0.5 Sols`);
+                await ctx.reply(`Transfer result: ${resuttx}`);
+                
+            }
+            
+        });
+
 
         // Command /me
         this.bot.command('me', async (ctx: Context) => {
@@ -108,58 +232,9 @@ export class SdkTonBot {
             }
         });
 
-        //sniffer 
-        /*
+        //structsniffer always running
         this.bot.on('message', async (ctx: Context) => {
-            const message = ctx.message;
-        
-            if (!message) {
-                console.error("No message found in the context.");
-                return;
-            }
-        
-            // Verificar si el mensaje tiene texto
-            if ('text' in message) {
-                const user = message.from?.username || "Unknown";
-                const text = message.text;
-        
-                console.log(`[${user}]: ${text}`); // Imprime en consola
-                appendLineToFile("log.txt",`[${user}]: ${text}`); // Guarda en archivo
 
-                let checkhourmsg = text.match(/\/hourmsg/i);
-
-                //await ctx.reply(`You said: ${text}`);
-            } else {
-                //console.log("Non-text message received.");
-                //await ctx.reply("This bot only processes text messages.");
-            }
-        });
-        */
-
-        /*structmsg
-            Full Message Object: {
-            "message_id": 35,
-            "from": {
-                "id": 167824567,
-                "is_bot": false,
-                "first_name": "Max",
-                "username": "newcortex",
-                "language_code": "es",
-                "is_premium": true
-            },
-            "chat": {
-                "id": -1002320133483,
-                "title": "Group With Shared Bot Sol AI Hack",
-                "type": "supergroup"
-            },
-            "date": 1734975224,
-            "text": "que la estan pasando"
-            }
-        */
-
-        //structsniffer
-        this.bot.on('message', async (ctx: Context) => {
-            // Interfaces para los distintos tipos de mensajes reenviados
             interface ForwardFrom {
                 id: number;
                 is_bot: boolean;
@@ -186,7 +261,6 @@ export class SdkTonBot {
                 date: number;
             }
         
-            // Mensaje completo
             interface Message {
                 forward_from?: ForwardFrom;
                 forward_origin?: ForwardOriginHiddenUser | ForwardOriginUser;
@@ -260,6 +334,8 @@ export class SdkTonBot {
                 console.log("Non-text message received.");
             }
         })
+
+
             
     }
 
