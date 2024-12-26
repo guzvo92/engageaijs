@@ -90,6 +90,77 @@ interface Message {
     forward_origin?: ForwardOriginHiddenUser | ForwardOriginUser; // Información del origen del reenvío (opcional)
 }
 
+function scrapeText(message:any){
+    console.log("ScrapeMsg")
+    const msgId = message.message_id;
+    const userId = message.from.id;
+    const isBot = message.from.is_bot;
+    const username = message.from.username || "NoUsername";
+    const dateTimestamp = message.date;
+    const chatId = message.chat.id;
+
+    if (isBot || username === "NoUsername") {console.log("MSG bot/user without username.");return;}
+
+    // manipulate received message
+    let isForwarder = false;
+    let fwd_userName: string | null = null;
+    let typemsg = "USER";
+    let userIDfwd = null;
+
+    if (message.forward_from) {
+        isForwarder = true;
+        fwd_userName = `${message.forward_from.username || "Unknown"}`;
+        userIDfwd = message.forward_from.id;
+        //typemsg = "fwdfrom";
+        typemsg = "FWDF";
+    } else if (message.forward_origin) {
+        isForwarder = true;
+        if (message.forward_origin.type === "hidden_user") {
+            //console.log("Hidden user found.");
+            //console.log(message)
+            userIDfwd = message.from.id;
+            const origin = message.forward_origin as ForwardOriginHiddenUser;
+            fwd_userName = `${origin.sender_user_name}`;
+            //typemsg = "fwdhidden";
+            typemsg = "FWDH";
+        }
+    }
+
+    let text = null
+    let processedText = null
+    if (message.text){
+        text = message.text;
+        processedText = message.text.replace(/\n/g, " ");
+    }
+
+    const registerStruct = isForwarder
+        ? `${dateTimestamp}__${msgId}__B${isBot? 1 : 0}__F${isForwarder? 1 : 0}__${typemsg}__${userIDfwd}__${fwd_userName}__${processedText}`
+        : `${dateTimestamp}__${msgId}__B${isBot? 1 : 0}__F${isForwarder? 1 : 0}__${typemsg}__${userId}__${username}__${processedText}`;
+
+
+    let res = {} as any;
+    res.date = parsetimestamp(dateTimestamp);
+    res.chatId = chatId;
+    res.isForwarder = isForwarder;
+    res.typemsg = typemsg;
+    
+    res.text = processedText;
+    res.registerStruct = registerStruct;
+    
+    if (isForwarder) {
+        res.userID = userIDfwd;
+        res.username = fwd_userName 
+    }
+    else{    
+        res.userID = userId;
+        res.username = username;
+    }
+
+    return res
+    //console.log("Message logged:", registerStruct);
+
+}
+
 export class SdkTonBot {
     private bot: Telegraf<Context>;
     private gptKey: string;
@@ -304,74 +375,17 @@ export class SdkTonBot {
         //structsniffer always running
         this.bot.on('message', async (ctx: Context) => {
         
-            const message = ctx.message as Message;
-        
-            if (!message) {
-                console.error("No message found in the context.");
-                return;
-            }
+            const message = ctx.message as Message;    
+            if (!message) {console.error("No message in the context.") ;return;}
         
             // Imprimir mensaje completo para depuración
             //console.log("Full Message Object:", JSON.stringify(message, null, 2));
-        
-            // Extraer información básica
-            const msgId = message.message_id;
-            const userId = message.from.id;
-            const isBot = message.from.is_bot;
-            const username = message.from.username || "NoUsername";
-            const dateTimestamp = message.date;
+            
+            let registerStruct:any= scrapeText(message);
+            //console.log("Message logged:", registerStruct);
 
-            const chatId = message.chat.id;
-        
-            // Filtrar mensajes de bots o usuarios sin nombre de usuario
-            if (isBot || username === "NoUsername") {
-                console.log("Filtered message from bot or user without username.");
-                return;
-            }
-        
-            // manipulate received message
-            let isForwarder = false;
-            let fwd_userName: string | null = null;
-            let typemsg = "USER";
-            let userIDfwd = null;
-        
-            if (message.forward_from) {
-                isForwarder = true;
-                fwd_userName = `${message.forward_from.username || "Unknown"}`;
-                userIDfwd = message.forward_from.id;
-                //typemsg = "fwdfrom";
-                typemsg = "FWDF";
-            } else if (message.forward_origin) {
-                isForwarder = true;
-                if (message.forward_origin.type === "hidden_user") {
-                    //console.log("Hidden user found.");
-                    //console.log(message)
-                    userIDfwd = message.from.id;
-                    const origin = message.forward_origin as ForwardOriginHiddenUser;
-                    fwd_userName = `${origin.sender_user_name}`;
-                    //typemsg = "fwdhidden";
-                    typemsg = "FWDH";
-                }
-            }
-        
-            // Handle text
-            if (message.text) {
-                let processedText = message.text.replace(/\n/g, " ");
-
-                const text = message.text;
-                const date = parsetimestamp(dateTimestamp);
-        
-                const registerStruct = isForwarder
-                    ? `${dateTimestamp}__${msgId}__B${isBot? 1 : 0}__F${isForwarder? 1 : 0}__${typemsg}__${userIDfwd}__${fwd_userName}__${processedText}`
-                    : `${dateTimestamp}__${msgId}__B${isBot? 1 : 0}__F${isForwarder? 1 : 0}__${typemsg}__${userId}__${username}__${processedText}`;
-
-                makedir(`astorage/${chatId}/crudetel/${date.yearmonthday}`);
-                await appendLineToFile(`astorage/${chatId}/crudetel/${date.yearmonthday}/h_${date.hour}.txt`, registerStruct);
-        
-                //console.log("Message logged:", registerStruct);
-            } else {
-                console.log("Non-text message received.");
-            }
+            makedir(`astorage/groups/${registerStruct.chatId}/crudetel/${registerStruct.date.yearmonthday}`);
+            await appendLineToFile(`astorage/groups/${registerStruct.chatId}/crudetel/${registerStruct.date.yearmonthday}/h_${registerStruct.date.hour}.txt`, registerStruct.registerStruct);
         })
 
 

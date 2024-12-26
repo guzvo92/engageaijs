@@ -119,7 +119,7 @@ export async function routineIA(idchat:number) {
     console.log("Starting routine for chat:", idchat);
     makedir("astorage/ia");
     makedir(`astorage/ia/${idchat}`);
-    let readedfilesdirchat = await readallfilesindir(`astorage/${idchat}/crudetel`);
+    let readedfilesdirchat = await readallfilesindir(`astorage/groups/${idchat}/crudetel`);
     if (!readedfilesdirchat) { return; }
     let ndays = readedfilesdirchat.length;
     console.log(`Days found in group ${idchat}: ${ndays}`);
@@ -130,7 +130,7 @@ export async function routineIA(idchat:number) {
         counterday++;
 
         makedir(`astorage/ia/${idchat}/${day}`);
-        let readedHourFiles = await readallfilesindir(`astorage/${idchat}/crudetel/${day}`);
+        let readedHourFiles = await readallfilesindir(`astorage/groups/${idchat}/crudetel/${day}`);
         if (!readedHourFiles) { return; }
         console.log(`Day: ${day}`);
         let nhourfiles = readedHourFiles.length;
@@ -140,7 +140,7 @@ export async function routineIA(idchat:number) {
             nhourfiles++;
 
             let namefile = filehour.split(".")[0];
-            let readcontent = await readraw(`astorage/${idchat}/crudetel/${day}/${filehour}`);
+            let readcontent = await readraw(`astorage/groups/${idchat}/crudetel/${day}/${filehour}`);
             if (!readcontent) { console.error(`No content: ${filehour}`);continue; }
             let lines = readcontent.split("\n");
 
@@ -156,7 +156,7 @@ export async function routineIA(idchat:number) {
             res.responsegpt=responsePrompt;
 
             try {
-                await makefile_custom(`astorage/ia/${idchat}/${day}/${namefile}.json`, JSON.stringify(res));
+                await makefile_custom(`astorage/groups/${idchat}/ia/${day}/${namefile}.json`, JSON.stringify(res));
                 return res;
             } catch (err) {
                 console.error(`Error writing file for ${filehour}:`, err);
