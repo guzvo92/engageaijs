@@ -8,8 +8,8 @@ npm install --save-dev ts-node
 
 
 
-docker build -t engageai .
-docker build --no-cache -t engageai .
-docker run -d -p 4100:3800 --name=engageai -v $PWD:/app engageai
+docker build -t engageaibot .
+docker build --no-cache -t engageaibot .
+docker run -d -p 4100:3800 --name=engageaibot -v $PWD:/app engageaibot
 
 docker run -it --rm engageai ls /app/src

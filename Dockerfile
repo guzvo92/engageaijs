@@ -1,21 +1,24 @@
-
 FROM node:23
+
+# Establecer el directorio de trabajo en el contenedor
 WORKDIR /app
-RUN apt-get update && apt-get install -y nano curl
+
+# Configurar la zona horaria
 ARG TIMEZONE=America/New_York
-ENV TZ $TIMEZONE
+ENV TZ=$TIMEZONE
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Copiar los archivos de configuración de la aplicación
 COPY package*.json ./
 
-# Copiar el código fuente de la aplicación al contenedor
+# Instalar las dependencias
+RUN npm cache clean --force && npm install
+
+# Copiar el código fuente de la aplicación
 COPY . .
 
-
-RUN npm cache clean --force && npm install
+# Exponer el puerto 3800
 EXPOSE 3800
 
-CMD ["npx", "ts-node", "src/index.ts" ]
-
-#WORKDIR directorio de la aplicación en el contenedor
+# Ejecutar la aplicación usando Bash
+CMD ["bash", "-c", "npx ts-node src/index.ts"]

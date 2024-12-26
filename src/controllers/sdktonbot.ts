@@ -26,6 +26,70 @@ The public commands available are:
 - hello   [PUBLIC] [says hello]
 `;
 
+interface ForwardFrom {
+    id: number;
+    is_bot: boolean;
+    username?: string;
+    first_name?: string;
+    last_name?: string;
+}
+
+interface ForwardOriginHiddenUser {
+    type: "hidden_user";
+    sender_user_name: string;
+    date: number;
+}
+
+interface ForwardOriginUser {
+    type: "user";
+    sender_user: {
+        id: number;
+        is_bot: boolean;
+        username?: string;
+        first_name?: string;
+        last_name?: string;
+    };
+    date: number;
+}
+
+/*
+interface Message {
+    forward_from?: ForwardFrom;
+    forward_origin?: ForwardOriginHiddenUser | ForwardOriginUser;
+    date: number;
+    text?: string;
+    from: {
+        id: number;
+        is_bot: boolean;
+        username?: string;
+    };
+    message_id: number;
+}*/
+
+interface Chat {
+    id: number; // ID del chat (negativo para grupos)
+    type: 'private' | 'group' | 'supergroup' | 'channel'; // Tipo de chat
+    title?: string; // Nombre del grupo o canal (opcional)
+    username?: string; // Nombre de usuario del chat (opcional, solo para canales o usuarios privados)
+    first_name?: string; // Primer nombre (para usuarios privados)
+    last_name?: string; // Apellido (para usuarios privados)
+    // Otros campos opcionales que pueden estar presentes en un objeto Chat
+}
+
+interface Message {
+    message_id: number; // ID único del mensaje
+    from: {
+        id: number; // ID del usuario que envió el mensaje
+        is_bot: boolean; // Indica si el usuario que envió el mensaje es un bot
+        username?: string; // Nombre de usuario del remitente
+    };
+    chat: Chat; // Información del chat donde se envió el mensaje
+    date: number; // Timestamp del mensaje
+    text?: string; // Texto del mensaje (opcional)
+    forward_from?: ForwardFrom; // Información del mensaje reenviado (opcional)
+    forward_origin?: ForwardOriginHiddenUser | ForwardOriginUser; // Información del origen del reenvío (opcional)
+}
+
 export class SdkTonBot {
     private bot: Telegraf<Context>;
     private gptKey: string;
@@ -52,7 +116,21 @@ export class SdkTonBot {
 
         //[PRIVATE COMMANDS] ---------------------------------------------------------
 
-        // Command /admin
+        //[ALL][Private] Command /me
+        this.bot.command('me', async (ctx: Context) => {
+            // Ensure that ctx.chat is defined and private
+            if (ctx.chat && ctx.chat.type === 'private') {
+                const user = ctx.from;
+                const userId = user?.id;
+                const username = user?.username || "Undefined"; // If the username is not set, display "No definido"
+                const phone = "Unavailable"; // Telegram API does not provide the user's phone number
+                await ctx.reply(`Your info is:\nID: ${userId}\nUsername: ${username}\nPhone: ${phone}`);
+            } else {
+                await ctx.reply(this.warningErrorPrivate); 
+            }
+        });
+
+        //[ALL][Private] Command /admin
         this.bot.command('admin', async (ctx: Context) => {
             const userId = ctx.from?.id;
 
@@ -63,7 +141,7 @@ export class SdkTonBot {
             await ctx.reply(`Enter mode admin achieved id ${userId}`);
         })
 
-        // Command /getchatid
+        //[ALL][Private] Command /getchatid
         this.bot.command('getchatid', async (ctx: Context) => {
             // Ensure that ctx.chat is defined and private
             if (ctx.chat && ctx.chat.type === 'private') {
@@ -74,7 +152,7 @@ export class SdkTonBot {
             }
         });
         
-        // Command /addwallet
+        //[ALL][Private] Command /addwallet
         this.bot.command('addwallet', async (ctx: Context) => {
             const userId = ctx.from?.id;
             const username = ctx.from?.username || "UnknownUser";
@@ -118,7 +196,7 @@ export class SdkTonBot {
             }
         });
 
-        // Command /lookwallet
+        //[ALL][Private] Command /lookwallet
         this.bot.command('lookwallet', async (ctx: Context) => {
             const userId = ctx.from?.id;
 
@@ -139,14 +217,17 @@ export class SdkTonBot {
             }
         });
 
+        //[PUBLIC COMMANDS] ---------------------------------------------------------
+        //[ADMIN][Private] command /sampleai
         this.bot.command('sampleai', async (ctx: Context) => {
             const userId = ctx.from?.id;
             //const wallet = walletData.wallet;
             //await ctx.reply(`Your wallet is: sample`);
             await ctx.reply("Scraping all messages and generatin AI analysis ...");
             if (userId !== this.adminId) {await ctx.reply("You are not admin"); return }
-
-            let resultAI = await routineIA();
+            //const chatId = message.chat.id;
+            const idchat = ctx.chat?.id || 0;
+            let resultAI = await routineIA(idchat);
             await ctx.reply("AI analysis completed");
             await ctx.reply(`[1] [IA scrap] ${resultAI.Totalmessages} messages`);
             await ctx.reply(`[2] [IA scrap] ${resultAI.responsegpt.Unique_users} unique users`);
@@ -186,26 +267,14 @@ export class SdkTonBot {
         });
 
 
-        // Command /me
-        this.bot.command('me', async (ctx: Context) => {
-            // Ensure that ctx.chat is defined and private
-            if (ctx.chat && ctx.chat.type === 'private') {
-                const user = ctx.from;
-                const userId = user?.id;
-                const username = user?.username || "Undefined"; // If the username is not set, display "No definido"
-                const phone = "Unavailable"; // Telegram API does not provide the user's phone number
-                await ctx.reply(`Your info is:\nID: ${userId}\nUsername: ${username}\nPhone: ${phone}`);
-            } else {
-                await ctx.reply(this.warningErrorPrivate); 
-            }
-        });
 
-        // Handler for messages containing "hello"
+
+        //[PUBLIC][ALL] Handler for messages containing "hello"
         this.bot.hears(/hello/i, async (ctx: Context) => {
             await ctx.reply("hellofrend"); // Simple response to "hello"
         });
 
-        // Handler for messages containing "gpt"
+        //[PUBLIC][ADMIN] Handler for messages containing "gpt"
         this.bot.hears(/gpt/i, async (ctx: Context) => {
             const userId = ctx.from?.id;
             if (userId !== this.adminId) {await ctx.reply("You are not admin"); return }
@@ -234,45 +303,6 @@ export class SdkTonBot {
 
         //structsniffer always running
         this.bot.on('message', async (ctx: Context) => {
-
-            interface ForwardFrom {
-                id: number;
-                is_bot: boolean;
-                username?: string;
-                first_name?: string;
-                last_name?: string;
-            }
-        
-            interface ForwardOriginHiddenUser {
-                type: "hidden_user";
-                sender_user_name: string;
-                date: number;
-            }
-        
-            interface ForwardOriginUser {
-                type: "user";
-                sender_user: {
-                    id: number;
-                    is_bot: boolean;
-                    username?: string;
-                    first_name?: string;
-                    last_name?: string;
-                };
-                date: number;
-            }
-        
-            interface Message {
-                forward_from?: ForwardFrom;
-                forward_origin?: ForwardOriginHiddenUser | ForwardOriginUser;
-                date: number;
-                text?: string;
-                from: {
-                    id: number;
-                    is_bot: boolean;
-                    username?: string;
-                };
-                message_id: number;
-            }
         
             const message = ctx.message as Message;
         
@@ -290,6 +320,8 @@ export class SdkTonBot {
             const isBot = message.from.is_bot;
             const username = message.from.username || "NoUsername";
             const dateTimestamp = message.date;
+
+            const chatId = message.chat.id;
         
             // Filtrar mensajes de bots o usuarios sin nombre de usuario
             if (isBot || username === "NoUsername") {
@@ -299,19 +331,26 @@ export class SdkTonBot {
         
             // manipulate received message
             let isForwarder = false;
-            let forwardInfo: string | null = null;
-            let typemsg = "user";
+            let fwd_userName: string | null = null;
+            let typemsg = "USER";
+            let userIDfwd = null;
         
             if (message.forward_from) {
                 isForwarder = true;
-                forwardInfo = `${message.forward_from.username || "Unknown"} (${message.forward_from.id})`;
-                typemsg = "fwdfrom";
+                fwd_userName = `${message.forward_from.username || "Unknown"}`;
+                userIDfwd = message.forward_from.id;
+                //typemsg = "fwdfrom";
+                typemsg = "FWDF";
             } else if (message.forward_origin) {
                 isForwarder = true;
                 if (message.forward_origin.type === "hidden_user") {
+                    //console.log("Hidden user found.");
+                    //console.log(message)
+                    userIDfwd = message.from.id;
                     const origin = message.forward_origin as ForwardOriginHiddenUser;
-                    forwardInfo = `${origin.sender_user_name}`;
-                    typemsg = "fwdhidden";
+                    fwd_userName = `${origin.sender_user_name}`;
+                    //typemsg = "fwdhidden";
+                    typemsg = "FWDH";
                 }
             }
         
@@ -323,11 +362,11 @@ export class SdkTonBot {
                 const date = parsetimestamp(dateTimestamp);
         
                 const registerStruct = isForwarder
-                    ? `${dateTimestamp}__${msgId}__${isBot}__${isForwarder}__${typemsg}__${forwardInfo}__${processedText}`
-                    : `${dateTimestamp}__${msgId}__${isBot}__${isForwarder}__${typemsg}__${username}__${processedText}`;
+                    ? `${dateTimestamp}__${msgId}__B${isBot? 1 : 0}__F${isForwarder? 1 : 0}__${typemsg}__${userIDfwd}__${fwd_userName}__${processedText}`
+                    : `${dateTimestamp}__${msgId}__B${isBot? 1 : 0}__F${isForwarder? 1 : 0}__${typemsg}__${userId}__${username}__${processedText}`;
 
-                makedir(`astorage/crudetel/${date.yearmonthday}`);
-                await appendLineToFile(`astorage/crudetel/${date.yearmonthday}/h_${date.hour}.txt`, registerStruct);
+                makedir(`astorage/${chatId}/crudetel/${date.yearmonthday}`);
+                await appendLineToFile(`astorage/${chatId}/crudetel/${date.yearmonthday}/h_${date.hour}.txt`, registerStruct);
         
                 //console.log("Message logged:", registerStruct);
             } else {

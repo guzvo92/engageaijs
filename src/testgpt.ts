@@ -115,22 +115,37 @@ Respond **only** with the JSON object. Do not include explanations, introduction
 
 
 
-export async function routineIA() {
+export async function routineIA(idchat:number) {
+    console.log("Starting routine for chat:", idchat);
     makedir("astorage/ia");
-    let readdirsatdb = await readallfilesindir("astorage/crudetel");
-    if (!readdirsatdb) { return; }
-    for (const day of readdirsatdb) {
-        makedir(`astorage/ia/${day}`);
-        let readdayfiles = await readallfilesindir(`astorage/crudetel/${day}`);
-        if (!readdayfiles) { return; }
-        for (const file of readdayfiles) {
-            let namefile = file.split(".")[0];
-            let readcontent = await readraw(`astorage/crudetel/${day}/${file}`);
-            if (!readcontent) { console.error(`No content: ${file}`);continue; }
+    makedir(`astorage/ia/${idchat}`);
+    let readedfilesdirchat = await readallfilesindir(`astorage/${idchat}/crudetel`);
+    if (!readedfilesdirchat) { return; }
+    let ndays = readedfilesdirchat.length;
+    console.log(`Days found in group ${idchat}: ${ndays}`);
+    
+    let counterday = 1;
+    for (const day of readedfilesdirchat) {
+        console.log(`Day ${counterday}/${ndays}: ${day}`);
+        counterday++;
+
+        makedir(`astorage/ia/${idchat}/${day}`);
+        let readedHourFiles = await readallfilesindir(`astorage/${idchat}/crudetel/${day}`);
+        if (!readedHourFiles) { return; }
+        console.log(`Day: ${day}`);
+        let nhourfiles = readedHourFiles.length;
+        let counterhour = 1;
+        for (const filehour of readedHourFiles) {
+            console.log(`Hour ${counterhour}/${nhourfiles}: ${filehour}`);
+            nhourfiles++;
+
+            let namefile = filehour.split(".")[0];
+            let readcontent = await readraw(`astorage/${idchat}/crudetel/${day}/${filehour}`);
+            if (!readcontent) { console.error(`No content: ${filehour}`);continue; }
             let lines = readcontent.split("\n");
 
             let responsePrompt = await structSendprompt(`${newpromptbase} \n ${readcontent}`);
-            if (!responsePrompt) {console.error(`No GPT: ${file}`);continue;}
+            if (!responsePrompt) {console.error(`No GPT: ${filehour}`);continue;}
             
             let res={} as any
             res.when= day;
@@ -141,10 +156,10 @@ export async function routineIA() {
             res.responsegpt=responsePrompt;
 
             try {
-                await makefile_custom(res, `astorage/ia/${day}/${namefile}.json`);
+                await makefile_custom(`astorage/ia/${idchat}/${day}/${namefile}.json`, JSON.stringify(res));
                 return res;
             } catch (err) {
-                console.error(`Error writing file for ${file}:`, err);
+                console.error(`Error writing file for ${filehour}:`, err);
             }
         }
     }
@@ -161,8 +176,8 @@ export async function routineIA() {
 async function main() {
     //await structSendprompt("Dime quien es Rambo");
     console.log("Starting routine...");
-    await routineIA();
+    await routineIA(-1002320133483);
     console.log("Routine finished.");
 }
 
-main();
+//main();
