@@ -13,3 +13,9 @@ docker build --no-cache -t engageaibot .
 docker run -d -p 4100:3800 --name=engageaibot -v $PWD:/app engageaibot
 
 docker run -it --rm engageai ls /app/src
+
+
+la version actual del dockerfile con alpipne:
+npm --version && node --version
+10.9.2
+v23.5.0

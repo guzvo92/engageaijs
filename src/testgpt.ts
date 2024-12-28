@@ -9,27 +9,22 @@ import { mkdir } from 'fs';
 dotenv.config();
 
 export async function structSendprompt(message: string): Promise<string | null> {
+    console.log("[PROMPT] Generating ...");
     const GPT_KEY = process.env.GPTKEY;
     if (!GPT_KEY) { throw new Error("GPTKEY no está definido en las variables de entorno."); }
     const gpt = new SdkGPT(GPT_KEY);
     try {
         // Genera la respuesta utilizando el prompt
         const response = await gpt.message(message);
-        //console.log("Respuesta de GPT:", response);
-        const cleanResponse = cleanGPTResponse(response);
-        
-        if (!cleanResponse) {
-            console.error("Failed to parse GPT response as valid JSON.");
-            return null;
-        }
+        console.log("[PROMPT] Response Received ...");
+        const cleanResponse = cleanGPTResponse(response);     
+        if (!cleanResponse) {console.error("Failed to clean GPT response.");return null;}
 
         const parsedResponse = cleanAndParseJSON(cleanResponse);
-        if (!parsedResponse) {
-            console.error("Failed to parse GPT response as valid JSON.");
-            return null;
-        }
+        if (!parsedResponse) {console.error("Failed to parse GPT response");return null;}
 
         return parsedResponse;
+
     } catch (error) {
         console.error("Error al generar el prompt:", error);
         return ""; // Devuelve una cadena vacía en caso de error
@@ -116,53 +111,69 @@ Respond **only** with the JSON object. Do not include explanations, introduction
 
 
 export async function routineIA(idchat:number) {
-    console.log("Starting routine for chat:", idchat);
-    makedir("astorage/ia");
-    makedir(`astorage/ia/${idchat}`);
+    console.log("[ROUTINE][1] Starting routine for chat:", idchat);
+    let basefolder = `astorage/groups/${idchat}`
+    makedir(basefolder);
+    makedir(`basefolder/ia`);
     let readedfilesdirchat = await readallfilesindir(`astorage/groups/${idchat}/crudetel`);
     if (!readedfilesdirchat) { return; }
     let ndays = readedfilesdirchat.length;
-    console.log(`Days found in group ${idchat}: ${ndays}`);
+    console.log(`[ROUTINE][2] Days found in group ${idchat}: [${ndays}]`);
     
     let counterday = 1;
     for (const day of readedfilesdirchat) {
-        console.log(`Day ${counterday}/${ndays}: ${day}`);
+        console.log(`[ROUTINE][3] Day ${counterday}/${ndays}: ${day}`);
         counterday++;
 
-        makedir(`astorage/ia/${idchat}/${day}`);
+        makedir(`astorage/groups/${idchat}/ia/${day}`);
+        console.log(`[ROUTINE][4] creando file ... ${day}`);
         let readedHourFiles = await readallfilesindir(`astorage/groups/${idchat}/crudetel/${day}`);
         if (!readedHourFiles) { return; }
-        console.log(`Day: ${day}`);
+        //console.log(`Day: ${day}`);
         let nhourfiles = readedHourFiles.length;
         let counterhour = 1;
+
+        let compoundPrompt = ""
         for (const filehour of readedHourFiles) {
-            console.log(`Hour ${counterhour}/${nhourfiles}: ${filehour}`);
+            console.log(`[ROUTINE][4] Hour ${counterhour}/${nhourfiles}: ${filehour}`);
             nhourfiles++;
 
             let namefile = filehour.split(".")[0];
             let readcontent = await readraw(`astorage/groups/${idchat}/crudetel/${day}/${filehour}`);
             if (!readcontent) { console.error(`No content: ${filehour}`);continue; }
-            let lines = readcontent.split("\n");
+            let countlines = readcontent.split("\n");
 
+            
             let responsePrompt = await structSendprompt(`${newpromptbase} \n ${readcontent}`);
             if (!responsePrompt) {console.error(`No GPT: ${filehour}`);continue;}
             
-            let res={} as any
-            res.when= day;
-            res.whenrun = new Date().toISOString();
-            res.hour= namefile;
-            res.Winner = 
-            res.Totalmessages=lines.length;
-            res.responsegpt=responsePrompt;
+            let resmini={} as any
+            resmini.when= day;
+            resmini.whenrun = new Date().toISOString();
+            resmini.hour= namefile;
+            resmini.Totalmessages=countlines.length;
+            resmini.responsegpt=responsePrompt;
 
-            try {
-                await makefile_custom(`astorage/groups/${idchat}/ia/${day}/${namefile}.json`, JSON.stringify(res));
-                return res;
-            } catch (err) {
-                console.error(`Error writing file for ${filehour}:`, err);
-            }
+
+            //make everyfile from every hour prompt
+            console.log(`[ROUTINE][5] Creating file ... ${namefile}`);
+            await makefile_custom(resmini,`astorage/groups/${idchat}/ia/${day}/${namefile}.json`);
+            
+            compoundPrompt += readcontent;
+            return resmini
         }
+
+        let resfile ={} as any
+        resfile.ncountlines = compoundPrompt.split("\n").length;
+
+        //EL COMPOUND LO ESTAMOS MANEJADO DIARIO
+        await makefile_customraw(compoundPrompt, `astorage/groups/${idchat}/ia/${day}/compound.txt`);
+        await makefile_custom(resfile, `astorage/groups/${idchat}/ia/${day}/compoundjson.json` );
+        
     }
+    
+    
+
     //console.log(readdirsatdb);
 }
 
@@ -181,3 +192,5 @@ async function main() {
 }
 
 //main();
+
+//npx ts-node src/testgpt.ts

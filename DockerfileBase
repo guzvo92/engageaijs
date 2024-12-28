@@ -1,14 +1,12 @@
 
-FROM node:alpine
+FROM node:23
 WORKDIR /app
-
-# Instalar herramientas necesarias
-RUN apk add --no-cache bash curl nano tzdata
+RUN apt-get update && apt-get install -y --no-install-recommends nano curl bash && apt-get clean
 
 # Configurar Bash como shell predeterminado
 SHELL ["/bin/bash", "-c"]
 
-
+# Configurar zona horaria
 ARG TIMEZONE=America/New_York
 ENV TZ=$TIMEZONE
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
@@ -17,8 +15,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 COPY package*.json ./
 RUN npm install
 COPY . .
-
-
 EXPOSE 3800
+
 # Iniciar Bash y ejecutar la aplicación
 CMD ["bash", "-c", "npx ts-node src/index.ts"]
