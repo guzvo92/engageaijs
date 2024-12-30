@@ -3,7 +3,7 @@
 import { Telegraf, Context } from 'telegraf';
 import { SdkGPT } from '../controllers/sdkgptv2'; // Ensure that the SdkGPT class is correctly exported
 import { makedir,fileExists,makefile_custom,readjson,readraw,appendLineToFile,parsetimestamp } from '../controllers/sdkmakers';
-import { routineIA } from '../testgpt';
+import { gpt_routineIA } from '../testgpt';
 import { readif_wallet } from './tools';
 import { SdkSolana } from './sdksolana';
 import { PublicKey } from '@solana/web3.js'
@@ -51,20 +51,6 @@ interface ForwardOriginUser {
     };
     date: number;
 }
-
-/*
-interface Message {
-    forward_from?: ForwardFrom;
-    forward_origin?: ForwardOriginHiddenUser | ForwardOriginUser;
-    date: number;
-    text?: string;
-    from: {
-        id: number;
-        is_bot: boolean;
-        username?: string;
-    };
-    message_id: number;
-}*/
 
 interface Chat {
     id: number; // ID del chat (negativo para grupos)
@@ -160,6 +146,17 @@ function scrapeText(message:any){
     //console.log("Message logged:", registerStruct);
 
 }
+
+async function fullRoutineAI(ctx:any, adminId:number){
+    const userId = ctx.from?.id;
+    if (userId !== adminId) {await ctx.reply("You are not admin"); return }
+
+    await ctx.reply("Scraping all messages and generatin AI analysis ...");
+
+    const idchat = ctx.chat?.id || 0;
+    let resultAI = await gpt_routineIA(idchat);
+}
+
 
 export class SdkTonBot {
     private bot: Telegraf<Context>;
@@ -288,6 +285,7 @@ export class SdkTonBot {
             }
         });
 
+        /*
         //[PUBLIC COMMANDS] ---------------------------------------------------------
         //[ADMIN][Private] command /sampleai
         this.bot.command('sampleai', async (ctx: Context) => {
@@ -335,9 +333,12 @@ export class SdkTonBot {
                 
             }
             
+        }); */
+
+
+        this.bot.command('ai', async (ctx: Context) => {
+            await fullRoutineAI(ctx, this.adminId);               
         });
-
-
 
 
         //[PUBLIC][ALL] Handler for messages containing "hello"

@@ -19,3 +19,14 @@ la version actual del dockerfile con alpipne:
 npm --version && node --version
 10.9.2
 v23.5.0
+
+
+folder criteria:
+astorage/
+astorage/configs   files.ts con prompts base
+astorage/groups/   folders con el idgroupchat
+astorage/wallets/  filesjson con iduserde de name
+
+
+//sudo chmod -R 777 groups
+

@@ -4,6 +4,7 @@ WORKDIR /app
 
 # Instalar herramientas necesarias
 RUN apk add --no-cache bash curl nano tzdata
+RUN echo "umask 0000" >> /etc/profile
 
 # Configurar Bash como shell predeterminado
 SHELL ["/bin/bash", "-c"]

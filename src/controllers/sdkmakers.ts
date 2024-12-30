@@ -187,6 +187,21 @@ export async function readLinesFromFile(filepath: string, legend: string | null 
     }
 }
 
+export async function readLinesFromFile_andmakelist(filepath: string): Promise<string[] | null> {
+  
+  const fileContent = await fs.readFile(filepath, 'utf8');
+  const lines: string[] = []; // Inicializar el array vacío
+  const parsedLines = fileContent.split(/\r?\n/); // Separar por saltos de línea
+  for (let i = 0; i < parsedLines.length; i++) {
+    let line = parsedLines[i].trim(); // Eliminar espacios en blanco
+    if (line !== '') { // Ignorar líneas vacías
+        lines.push(line);
+    }
+  }
+  return lines; 
+}
+
+
 export async function appendLineToFile(filepath: string, line: string, legend: string | null = null): Promise<boolean> {
     try {
         // Appends the line to the file with a newline at the end
