@@ -2,7 +2,7 @@
 
 import { Telegraf, Context } from 'telegraf';
 import { SdkGPT } from '../controllers/sdkgptv2'; // Ensure that the SdkGPT class is correctly exported
-import { makedir,fileExists,makefile_custom,readjson,readraw,appendLineToFile,parsetimestamp } from '../controllers/sdkmakers';
+import { makedir,fileExists,makefile_custom,readjson,readraw,appendLineToFile,parsetimestamp, deletefile } from '../controllers/sdkmakers';
 import { gpt_routineIA } from '../testgpt';
 import { readif_wallet } from './tools';
 import { SdkSolana } from './sdksolana';
@@ -11,17 +11,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const messageStart =
-`Hello welcome to this awesome MVP
+`Hello fren this is the EngageAI bot [🤖 v0.1.0] \n
 The private commands available are:
 - /admin      [ADMIN] [gives a test of admin check command]
 - /getchatid  [gives to u the chat id]
 - /me         [gives to u the user information]
-- /lookwallet [gives to u the wallet address]
-\n
+- /lookwallet [gives to u the wallet address] \n
 Private Interactive commands:
-- /addwallet PasteWalletHERE [gives to u the wallet address]
+- /addwallet PasteWalletHERE [associate ur address with the bot]
 (the command at Demo needs write /addwallet and paste the wallet address)
-\n
+- /deletewallet [delete actual wallet address] \n
 The public commands available are:
 - hello   [PUBLIC] [says hello]
 `;
@@ -214,7 +213,7 @@ export class SdkTonBot {
             // Ensure that ctx.chat is defined and private
             if (ctx.chat && ctx.chat.type === 'private') {
                 const chatId = ctx.chat.id;
-                await ctx.reply(`El ID de este chat es: ${chatId}`);
+                await ctx.reply(`This chatID: ${chatId}`);
             } else {
                 await ctx.reply(this.warningErrorPrivate); // Inform user the command is private
             }
@@ -264,6 +263,36 @@ export class SdkTonBot {
             }
         });
 
+        //[ALL][Private] Command /deletewallet
+        this.bot.command('deletewallet', async (ctx: Context) => {
+            const userId = ctx.from?.id;
+
+            // Verifica que sea un chat privado
+            if (ctx.chat && ctx.chat.type === 'private') {
+                const walletFilePath = `astorage/wallets/${userId}.json`;
+                const walletData = await readjson(walletFilePath, "Error reading wallet file");
+
+                // Verificar si se encontró la wallet
+                if (!walletData) {
+                    await ctx.reply("No wallet found for this user.");
+                    return;
+                }
+
+                // Eliminar el archivo de la wallet
+                try {
+                    await fileExists(walletFilePath);
+                    await deletefile(walletFilePath);
+                    await ctx.reply("Wallet successfully deleted.");
+                } catch (error) {
+                    console.error("Error deleting wallet file:", error);
+                    await ctx.reply("There was an error deleting your wallet. Please try again later.");
+                }
+            } else {
+                await ctx.reply(this.warningErrorPrivate); // Inform user the command is private
+            }
+        });
+
+
         //[ALL][Private] Command /lookwallet
         this.bot.command('lookwallet', async (ctx: Context) => {
             const userId = ctx.from?.id;
@@ -279,7 +308,10 @@ export class SdkTonBot {
                     return;
                 }
                 const wallet = walletData.wallet;
-                await ctx.reply(`Your wallet is: ${wallet}`);
+                const first5digits = wallet.slice(0, 5);
+                const last5digits = wallet.slice(-5);
+                const parsedwallet = `${first5digits}...${last5digits}`;
+                await ctx.reply(`Your wallet is: ${parsedwallet}`);
             } else {
                 await ctx.reply(this.warningErrorPrivate); // Inform user the command is private
             }
