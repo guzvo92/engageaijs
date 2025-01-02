@@ -12,17 +12,18 @@ dotenv.config();
 
 const messageStart =
 `Hello fren this is the EngageAI bot [🤖 v0.1.0] \n
-The private commands available are:
-- /admin      [ADMIN] [gives a test of admin check command]
+[1] Private info commands available are:
+- /admin      [ADMIN] [test of admin check command]
 - /getchatid  [gives to u the chat id]
-- /me         [gives to u the user information]
+- /me         [gives to u the user information] 
 - /lookwallet [gives to u the wallet address] \n
-Private Interactive commands:
-- /addwallet PasteWalletHERE [associate ur address with the bot]
+[2] Private Interactive commands:
+- /addwallet PasteWalletHERE [associate wallet with bot]
 (the command at Demo needs write /addwallet and paste the wallet address)
 - /deletewallet [delete actual wallet address] \n
-The public commands available are:
+[3] Public commands available are:
 - hello   [PUBLIC] [says hello]
+- More public commands coming soon...
 `;
 
 interface ForwardFrom {
@@ -375,7 +376,7 @@ export class SdkTonBot {
 
         //[PUBLIC][ALL] Handler for messages containing "hello"
         this.bot.hears(/hello/i, async (ctx: Context) => {
-            await ctx.reply("hellofrend"); // Simple response to "hello"
+            await ctx.reply("hellofren"); // Simple response to "hello"
         });
 
         //[PUBLIC][ADMIN] Handler for messages containing "gpt"
