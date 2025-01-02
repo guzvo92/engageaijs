@@ -12,7 +12,7 @@ https://engageai.world
 
 ## Telegram Bot 
 @Hackathon_solai_bot
-https://t.me/Hackathon_sola_bot
+https://t.me/Hackathon_solai_bot
 
 ## Twitter
 https://x.com/engageai_ai
