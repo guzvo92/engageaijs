@@ -1,20 +1,21 @@
 
 
 
-Project Deck:
+## Project Deck:
 https://www.canva.com/design/DAGaKJqCJJk/pZmRKGOaABzIY5cojWT2Lg/edit?utm_content=DAGaKJqCJJk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
 
-Github repo:
+## Github repo:
 https://github.com/guzvo92/engageaijs.git
 
-Site
-soltest.info
+## Production Site
+https://engageai.world
 
-bot 
+## Telegram Bot 
 @Hackathon_solai_bot
+https://t.me/Hackathon_sola_bot
 
-twitter
-@engageai_ai
+## Twitter
+https://x.com/engageai_ai
 
 
 
