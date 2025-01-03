@@ -11,7 +11,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const messageStart =
-`Hello fren this is the EngageAI bot [🤖 v0.1.0] \n
+`Hello fren this is the EngageAI bot [🤖 v0.1.0] 
+explore the project at https://engageai.world
+\n
 [1] Private info commands available are:
 - /admin      [ADMIN] [test of admin check command]
 - /getchatid  [gives to u the chat id]
