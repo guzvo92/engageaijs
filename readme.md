@@ -1,6 +1,8 @@
 ## Production Site
 [https://engageai.world](https://engageai.world)
 
+## WE HAVE NOT SPL TOKEN DEPLOYED take care of scammers.
+
 ## ABOUT DEMO
 In this repo, we provide a hackathon demo Telegram bot, deployed with BotFather configurations as a template.  
 This bot has the ability to:
@@ -44,8 +46,13 @@ This bot has the ability to:
 - Sandboxing new reward mechanics to engage users with the project. (group bot added)
 - Exploring the Solana Agent Kit for additional integrations.
 
-## Other keypoints to perform the Proof of concept: 
+# Other keypoints to perform the Proof of concept: 
 - Developing a demo that syncs with Metaverse Decentraland events on a parcel as listeners to generate other rewards payment mechanics.
 - Developing a demo that scrapes Solana signatures related to a token to expose insights and metrics in the agent.
 - Commans that provides wallet insights related a token (group bot added)
+
+# Other related to the Project:
+- Working at render production a development sites for the project
+- Generate a structured roadmap for the longterm ...
+- Working at socials and spaces structure
 
