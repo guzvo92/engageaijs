@@ -3,7 +3,7 @@
 
 ---
 
-## ⚠️ **WE HAVE NOT DEPLOYED AN SPL TOKEN - Beware of Scammers!**
+## ⚠️ **WE HAVE NOT DEPLOYED A SPL TOKEN - Beware of Scammers!**
 
 ---
 
