@@ -41,7 +41,9 @@ https://x.com/engageai_ai
 
 - Fixing things at Dynamic_db to perform mantinability and scalability through groups
 - Sandboxing other stored forms of manipulate the data
-
+- Exploring the solana agent kit for other integrations
+- Creating a demo sync with Metaverse Decentraland Parcel events listener
+- Creating a demo that scrape solana signatures related a token for expose insights and metrics at the Agent 
 
 
 
