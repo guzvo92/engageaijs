@@ -9,7 +9,7 @@
 
 ## About the Project
 
-We started this project with the idea of creating a social framework using Telegram bots as the user interface. By leveraging Telegram's data storage capabilities, we aim to enable an intelligent agent to interact with users, learn from them, and provide value to the community. Our motivation also extends to exploring other data hubs, such as social media data clusters, with the vision of deploying agents across Telegram and the metaverse.
+We started this project with the idea of creating a social framework using Telegram bots as the user interface. By leveraging Telegram's data storage capabilities, we aim to enable an intelligent agent to interact with users, learn from them, and provide value to the community. Our motivation also extends to exploring other data hubs, such as social media data, metaverse events triggers at decentraland parcels and other mechanics around the telegram data with the vision of deploying agents and tools across Telegram and the metaverse.
 
 ---
 
