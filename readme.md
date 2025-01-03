@@ -41,9 +41,11 @@ This bot has the ability to:
 - Fixing issues in `dynamic_db` to improve maintainability and scalability across groups.
 - Sandboxing other storage formats to manipulate data.
 - Generating new values of `inhouse_templates` for perform the criteria in what we determine value to reward.
-- Sandboxing new reward mechanics to engage users with the project.
+- Sandboxing new reward mechanics to engage users with the project. (group bot added)
 - Exploring the Solana Agent Kit for additional integrations.
-- Creating a demo that syncs with Metaverse Decentraland Parcel events listeners.
+
+## Other keypoints to perform the Proof of concept: 
+- Developing a demo that syncs with Metaverse Decentraland events on a parcel as listeners to generate other rewards payment mechanics.
 - Developing a demo that scrapes Solana signatures related to a token to expose insights and metrics in the agent.
 - Commans that provides wallet insights related a token (group bot added)
 
