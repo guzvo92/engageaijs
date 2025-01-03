@@ -1,49 +1,45 @@
 ## Production Site
-https://engageai.world
+[https://engageai.world](https://engageai.world)
 
-## ABOUT
-In this repo we provide a hackathon demo telegram bot, deployed at botfather configurations template.
-This has the ability to:
-- ✅ Listen all messages of group in what is added
-- ✅ BOT config Commands public & private:
-    -[Priv] /admin [look if ur user is classify by admin in the bot]
-    -[Priv] /getchaitd [get chat id]
-    -[Priv] /me [get info of me (telegramUserID, username)]
-    -[Priv] /lookwallet [loot if has wallet sync with the bot]
-    -[PUB] hello [Bot responds with a msg]
-    -[Priv][Interactive] /addwallet $SOLANA_WALLET_ADDRESS (write command space an wallet to associate ur wallet with the bot)
-    -[Priv][Interactive] /deletewallet (deletes the wallet asssociated to ur userID)
-- ✅ [DYNAMYC_DB] Generate a DB and struct the data of MSGs listened
-- ✅ These dynamic_db is used to work with gpt4 model to interact
-- ✅ [INHOUSE_TEMPLATES] We selected some inhouse_templates to interact with gpt to classify value at chat provided by dynamic_db
-- ✅ After some templates we determine some insights about chat
-- ✅ [SOLANA_KP] The Bot has been sync with one Solana-KP at devnet to has some Reward Vault
-- ✅ After determination of Insights Value the bot pay some percent of vault to reward the most valued User Determination
-- ✅ [SIGNATURE_TRANSFER_DEVNET] The bot uses a transfer transaction and provides a signature.
+## ABOUT DEMO
+In this repo, we provide a hackathon demo Telegram bot, deployed with BotFather configurations as a template.  
+This bot has the ability to:
 
+- ✅ Listen to all messages in the group where it is added.
+- ✅ BOT configuration commands, both public and private:
+  - **[Priv]** `/admin` (checks if your user is classified as admin by the bot)
+  - **[Priv]** `/getchatid` (retrieves the chat ID)
+  - **[Priv]** `/me` (retrieves your info: TelegramUserID, username)
+  - **[Priv]** `/lookwallet` (checks if you have a wallet synced with the bot)
+  - **[PUB]** `hello` (the bot responds with a message)
+  - **[Priv][Interactive]** `/addwallet $SOLANA_WALLET_ADDRESS`  
+    (write the command, followed by a space and your wallet address to associate it with the bot)
+  - **[Priv][Interactive]** `/deletewallet`  
+    (deletes the wallet associated with your user ID)
+- ✅ **[DYNAMIC_DB]** Generates a database and structures the data of messages listened to.
+- ✅ This `dynamic_db` is used to work with the GPT-4 model for interaction.
+- ✅ **[INHOUSE_TEMPLATES]** Selected in-house templates are used to interact with GPT, classifying the value of chats based on `dynamic_db`.
+- ✅ After using some templates, insights about the chat are determined.
+- ✅ **[SOLANA_KP]** The bot is synced with a Solana Keypair on Devnet, serving as a Reward Vault.
+- ✅ After determining insights, the bot pays a percentage of the vault as a reward to the most valued user.
+- ✅ **[SIGNATURE_TRANSFER_DEVNET]** The bot uses a transfer transaction and provides a signature.
 
 ## Project Deck:
-https://www.canva.com/design/DAGaKJqCJJk/pZmRKGOaABzIY5cojWT2Lg/edit?utm_content=DAGaKJqCJJk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+[View on Canva](https://www.canva.com/design/DAGaKJqCJJk/pZmRKGOaABzIY5cojWT2Lg/edit?utm_content=DAGaKJqCJJk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
-## Github repo:
-https://github.com/guzvo92/engageaijs.git
-
+## Github Repo:
+[https://github.com/guzvo92/engageaijs.git](https://github.com/guzvo92/engageaijs.git)
 
 ## Telegram Bot 
-@Hackathon_solai_bot
-https://t.me/Hackathon_solai_bot
+[@Hackathon_solai_bot](https://t.me/Hackathon_solai_bot)
 
 ## Twitter
-https://x.com/engageai_ai
+[https://x.com/engageai_ai](https://x.com/engageai_ai)
 
+## Some points that we are working on...
 
-## Some points that we are working ...
-
-- Fixing things at Dynamic_db to perform mantinability and scalability through groups
-- Sandboxing other stored forms of manipulate the data
-- Exploring the solana agent kit for other integrations
-- Creating a demo sync with Metaverse Decentraland Parcel events listener
-- Creating a demo that scrape solana signatures related a token for expose insights and metrics at the Agent 
-
-
-
+- Fixing issues in `dynamic_db` to improve maintainability and scalability across groups.
+- Sandboxing other storage formats to manipulate data.
+- Exploring the Solana Agent Kit for additional integrations.
+- Creating a demo that syncs with Metaverse Decentraland Parcel events listeners.
+- Developing a demo that scrapes Solana signatures related to a token to expose insights and metrics in the agent.
