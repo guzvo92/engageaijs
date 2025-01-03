@@ -4,8 +4,8 @@ https://engageai.world
 ## ABOUT
 In this repo we provide a hackathon demo telegram bot, deployed at botfather configurations template.
 This has the ability to:
-✅ Listen all messages of group in what is added
-✅ BOT config Commands public & private:
+- ✅ Listen all messages of group in what is added
+- ✅ BOT config Commands public & private:
     -[Priv] /admin [look if ur user is classify by admin in the bot]
     -[Priv] /getchaitd [get chat id]
     -[Priv] /me [get info of me (telegramUserID, username)]
@@ -13,13 +13,13 @@ This has the ability to:
     -[PUB] hello [Bot responds with a msg]
     -[Priv][Interactive] /addwallet $SOLANA_WALLET_ADDRESS (write command space an wallet to associate ur wallet with the bot)
     -[Priv][Interactive] /deletewallet (deletes the wallet asssociated to ur userID)
-✅ [DYNAMYC_DB] Generate a DB and struct the data of MSGs listened
-✅ These dynamic_db is used to work with gpt4 model to interact
-✅ [INHOUSE_TEMPLATES] We selected some inhouse_templates to interact with gpt to classify value at chat provided by dynamic_db
-✅ After some templates we determine some insights about chat
-✅ [SOLANA_KP] The Bot has been sync with one Solana-KP at devnet to has some Reward Vault
-✅ After determination of Insights Value the bot pay some percent of vault to reward the most valued User Determination
-✅ [SIGNATURE_TRANSFER_DEVNET] The bot uses a transfer transaction and provides a signature.
+- ✅ [DYNAMYC_DB] Generate a DB and struct the data of MSGs listened
+- ✅ These dynamic_db is used to work with gpt4 model to interact
+- ✅ [INHOUSE_TEMPLATES] We selected some inhouse_templates to interact with gpt to classify value at chat provided by dynamic_db
+- ✅ After some templates we determine some insights about chat
+- ✅ [SOLANA_KP] The Bot has been sync with one Solana-KP at devnet to has some Reward Vault
+- ✅ After determination of Insights Value the bot pay some percent of vault to reward the most valued User Determination
+- ✅ [SIGNATURE_TRANSFER_DEVNET] The bot uses a transfer transaction and provides a signature.
 
 
 ## Project Deck:
