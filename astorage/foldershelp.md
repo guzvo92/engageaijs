@@ -1,4 +1,0 @@
-folders:
-
-astorage
-astorage/crudetel
