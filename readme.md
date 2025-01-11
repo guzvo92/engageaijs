@@ -37,6 +37,19 @@ This repository provides a hackathon demo Telegram bot, configured using BotFath
 - ✅ Provides chat insights using the templates.
 - ✅ **[SOLANA_KP]** Syncs with a Solana Keypair on Devnet, serving as a Reward Vault.
 - ✅ Rewards the most valued user with a percentage of the vault after generating insights.
+
+**[Enhancement of Criteria on development]**
+
+1. **Number of interactions**  
+   This measures the total number of interactions within the group, active participation by members. ✅
+
+2. **Number of messages with positive content**  
+   Messages that foster a constructive, trustworthy, and friendly environment are evaluated, considering the use of positive and motivating language. ✅
+
+3. **Number of interactions with objective content**  
+   Priority is given to interactions that include relevant information, as opposed to emotional expressions.
+
+   
 - ✅ **[SIGNATURE_TRANSFER_DEVNET]** Executes transfer transactions and provides signatures.
 
 ---
